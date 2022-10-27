@@ -53,6 +53,8 @@ ui <- navbarPage(
     
 )
 
+gs4_create("test_sheet")
+
 # Define server logic required to draw a histogram
 server <- function(input, output) {
 
