@@ -1,20 +1,3 @@
 # workload_app
 
-This is app is supposed to be used as a way to input and track athlete well being. 
-
-Questionnaire
-
-* simply input:
-  - name
-  - date
-  - sleep 
-  - soreness
-  - happiness
-  
-RPE 
-
-* simply input:
-  - name
-  - date 
-  - Rate of Perceived Exertion (RPE)
-  - session duration
+This is app is plotting WHOOP data across time. The only file that needs to be updated is under fread with the file path to WHOOP physiology data.
