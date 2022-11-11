@@ -1,5 +1,19 @@
 pacman::p_load(shiny, tidyverse, tidytable, data.table, lubridate, runner, roll, 
-               thematic)
+               thematic, showtext, shinythemes, htmlwidgets, RCurl, httr, rsconnect,
+               extrafont)
+
+##########
+########## themes ---------------------------------------------------------
+##########
+
+windowsFonts(a = windowsFont("Times New Roman"))
+
+fletch_theme <- function(){
+  theme(title = element_text(size = 20, face = 'bold', family = "TT Times New Roman"), 
+        axis.title.x = element_text(size = 15, family = "TT Times New Roman"),
+        axis.title.y = element_text(size = 15, family = "TT Times New Roman"),
+        axis.text = element_text(size = 12, family = "TT Times New Roman"))
+}
 
 ##########
 ########## data import ---------------------------------------------------------
@@ -47,15 +61,17 @@ phys_data <- fread("physiological_cycles.csv") %>%
 ##########
 ########## setting user interface ----------------------------------------------
 ##########
+
 ui <- navbarPage(
+  title = "Whoop Tracking",
+  includeCSS("www/whoop_app.css"),
   
-
-  title = "Daily Monitoring",
-
-  
-    # WHOOP Daily Activity  ----------------------------------------------------
+# WHOOP Daily Activity  ----------------------------------------------------
     tabPanel("Activity", 
-             fluidRow(
+             fluidRow( tags$style(type='text/css',
+                                  ".selectize-dropdown-content{
+                                  font-size = 16px;
+                                  }"),
                column(9, align = 'left',
                       selectizeInput(inputId = "raw_activity", 
                                      label = "Activity:",
@@ -64,7 +80,12 @@ ui <- navbarPage(
                       )
              ),
              plotOutput("activity_plot"),
-             plotOutput("activity_z_plot")
+             br(),
+             p(em("Raw data ribbon is set at Value +/- (Value SD * 1.5)")),
+             br(),
+             plotOutput("activity_z_plot"), 
+             br(),  
+             p(em("Z-score data ribbon is set at Rolling Value Z-score +/- 1.5"))
              ), 
     # WHOOP Sleep Metrics ------------------------------------------------------
     tabPanel("Sleep",
@@ -79,7 +100,12 @@ ui <- navbarPage(
                       )
              ), 
              plotOutput("sleep_plot"),
-             plotOutput("sleep_z_plot")
+             br(),
+             p(em("Raw data ribbon is set at Value +/- (Value SD * 1.5)")),
+             br(),
+             plotOutput("sleep_z_plot"), 
+             br(),  
+             p(em("Z-score data ribbon is set at Rolling Value Z-score +/- 1.5"))
              ), 
     # WHOOP Recovery Metrics ---------------------------------------------------
     tabPanel("Recovery", 
@@ -92,9 +118,19 @@ ui <- navbarPage(
                       )
              ), 
              plotOutput("recovery"),
-             plotOutput("recovery_z_plot")
-             )
+             br(),
+             p(em("Raw data ribbon is set at Value +/- (Value SD * 1.5)")),
+             br(),
+             plotOutput("recovery_z_plot"),
+             br(),  
+             p(em("Z-score data ribbon is set at Rolling Value Z-score +/- 1.5"))
+             ), 
+
+
+
+
 )
+
 
 
 # Define server logic required to draw a histogram
@@ -132,11 +168,12 @@ recov_react <- reactive({
       geom_point(aes(date, value, color = raw_color), size = 3) +
       ylab(input$raw_activity) +
       scale_color_identity() +
-      labs(title = str_to_upper(paste(input$raw_activity, "Raw Data Across Time"))) +
-      theme(title = element_text(size = 20, face = 'bold'), 
+      labs(title = str_to_upper(paste(input$raw_activity, "Raw Data Across Time")))+
+      theme(title = element_text(size = 20, face = 'bold', family = "Times New Roman"),
             axis.title.x = element_text(size = 15),
             axis.title.y = element_text(size = 15),
-            axis.text = element_text(size = 12))
+            axis.text = element_text(size = 12), 
+            text = element_text(family = "a"))
   })
   
   output$activity_z_plot<- renderPlot({
@@ -153,7 +190,7 @@ recov_react <- reactive({
       theme(title = element_text(size = 20, face = 'bold'), 
             axis.title.x = element_text(size = 15),
             axis.title.y = element_text(size = 15),
-            axis.text = element_text(size = 12))
+            axis.text = element_text(size = 12, family = "Times New Roman"))
   })
  
   output$sleep_plot <- renderPlot({
@@ -225,13 +262,7 @@ recov_react <- reactive({
             axis.title.x = element_text(size = 15),
             axis.title.y = element_text(size = 15),
             axis.text = element_text(size = 12))
-
   })
-  
-  
-  
-  thematic_shiny()
-  
 }
 
 # Run the application 

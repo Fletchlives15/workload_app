@@ -1,0 +1,11 @@
+name: workload_app
+title:
+username:
+account: fletch
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 7595542
+bundleId: 6501340
+url: https://fletch.shinyapps.io/workload_app/
+when: 1668141205.34985
+lastSyncTime: 1668141205.34985
