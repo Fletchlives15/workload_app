@@ -2,21 +2,6 @@ pacman::p_load(shiny, tidyverse, tidytable, data.table, lubridate, runner, roll,
                thematic, shinythemes, htmlwidgets, RCurl, httr, rsconnect, shinydashboard)
 
 ##########
-########## themes ---------------------------------------------------------
-##########
-
-# windowsFonts(a = windowsFont("Times New Roman"))
-# 
-# fletch_theme <- function(){
-#   theme_fletch <- list(theme(title = element_text(size = 20, face = 'bold', family = "TT Times New Roman"), 
-#         axis.title.x = element_text(size = 15, family = "TT Times New Roman"),
-#         axis.title.y = element_text(size = 15, family = "TT Times New Roman"),
-#         axis.text = element_text(size = 12, family = "TT Times New Roman")))
-#   
-#   return(theme_fletch)
-# }
-
-##########
 ########## data import ---------------------------------------------------------
 ##########
 
@@ -47,18 +32,6 @@ phys_data <- fread("physiological_cycles.csv") %>%
           .by = name) %>% 
   mutate.(name = str_replace_all(name, "_", " "))
 
-# work_data <- fread("workouts.csv") %>% 
-#   janitor::clean_names() %>% 
-#   mutate.(date = as.Date(workout_start_time), 
-#           .before = cycle_start_time) %>% 
-#   arrange.(date) %>% 
-#   drop_na.(activity_strain)
-
-
-# sleep_data <- fread("sleeps.csv") %>% 
-#   janitor::clean_names()
-
-# phys_data_join <- left_join.(phys_data, strain)
 ##########
 ########## setting user interface ----------------------------------------------
 ##########
