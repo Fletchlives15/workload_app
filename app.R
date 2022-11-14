@@ -15,8 +15,6 @@ phys_data <- fread("physiological_cycles.csv") %>%
   mutate.(date = case_when.(as.ITime(cycle_start_time) < as.ITime("05:00:00") ~ date - days(1), 
                             TRUE ~ date)) %>% 
   select.(-c(contains("cycle"), contains("onset"))) %>% 
-  # mutate.(across.(where(is.numeric), ~roll_scale(.x, width = 7, min_obs = 2), 
-                  # .names = "{.col}_scale_roll"))# |> 
   pivot_longer.(-date) %>% 
   mutate.(z = c(scale(value)), 
           .by = name) %>% 
@@ -73,10 +71,10 @@ body <- dashboardBody(
          br(),
          plotOutput("activity_plot"),
          br(),
-         p(em("Raw data ribbon is set at Value +/- (Value SD * 1.5)")),
+         p(em("Raw data ribbon is set at Value +/- (Rolling 7-day Value SD * 1.5)")),
          plotOutput("activity_z_plot"), 
          br(),
-         p(em("Z-score data ribbon is set at Rolling Value Z-score +/- 1.5"))
+         p(em("Z-score data ribbon is set at Rolling 7-Day Value Z-score +/- 1.5"))
          ),
 
     # WHOOP Sleep Metrics ------------------------------------------------------
@@ -98,11 +96,11 @@ body <- dashboardBody(
             br(),
             plotOutput("sleep_plot"),
             br(),
-            p(em("Raw data ribbon is set at Value +/- (Value SD * 1.5)")),
+            p(em("Raw data ribbon is set at Value +/- (Rolling 7-day Value SD * 1.5)")),
             br(),
             plotOutput("sleep_z_plot"),
             br(),
-            p(em("Z-score data ribbon is set at Rolling Value Z-score +/- 1.5"))
+            p(em("Z-score data ribbon is set at Rolling 7-Day Value Z-score +/- 1.5"))
     ),
     # # WHOOP Recovery Metrics ---------------------------------------------------
     tabItem(tabName = "recovery",
@@ -121,11 +119,11 @@ body <- dashboardBody(
             br(),
             plotOutput("recovery"),
             br(),
-            p(em("Raw data ribbon is set at Value +/- (Value SD * 1.5)")),
+            p(em("Raw data ribbon is set at Value +/- (Rolling 7-day Value SD * 1.5)")),
             br(),
             plotOutput("recovery_z_plot"),
             br(),
-            p(em("Z-score data ribbon is set at Rolling Value Z-score +/- 1.5"))
+            p(em("Z-score data ribbon is set at Rolling 7-Day Value Z-score +/- 1.5"))
             )
   ))
 ui <- dashboardPage(header, sidebar, body)
